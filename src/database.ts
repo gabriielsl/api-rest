@@ -2,12 +2,14 @@ import knex from "knex";            // Importação da Lib
 import type { Knex } from "knex"    // Importação apenas do tipo
 import { env } from "./env/index.js";
 
-
+// Setup/configuração do banco de dados
 export const config: Knex.Config = {
-    client: "sqlite3",
-    connection: {
-        filename: env.DATABASE_URL,     // Uso da variável de ambiente
-    },
+    client: env.DATABASE_CLIENT,
+    connection: env.DATABASE_URL === "sqlite" 
+    ? {
+        filename: env.DATABASE_URL,
+      }
+    : env.DATABASE_URL,
     useNullAsDefault: true,
     migrations: {
         extension: "ts",
@@ -15,4 +17,4 @@ export const config: Knex.Config = {
     }
 }
 
-export const setupKnex = knex(config)   // Exportando as configurações do banco de dados
+export const setupKnex = knex(config)
